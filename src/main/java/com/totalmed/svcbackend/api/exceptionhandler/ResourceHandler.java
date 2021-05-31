@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.totalmed.svcbackend.domain.exception.AcessoNegadoException;
 import com.totalmed.svcbackend.domain.exception.EntidadeEmUsoException;
 import com.totalmed.svcbackend.domain.exception.EnvioEmailException;
+import com.totalmed.svcbackend.domain.exception.ErroInternoNoServidorException;
 import com.totalmed.svcbackend.domain.exception.NegocioException;
 import com.totalmed.svcbackend.domain.exception.RecursoNaoEncontradoException;
 
@@ -38,6 +39,17 @@ public class ResourceHandler extends ResponseEntityExceptionHandler {
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		Error error = Error.ERRO_INTERNO_NO_SERVIDOR;
 		String message = "Ocorreu um erro inesperado no servidor(backend), se o problema persistir recomendo que entre em contato com o desenvolvedor a API.";
+		ProblemDetail problemDetail = new ProblemDetail(error.getType(), error.getTitle(), status.value(), message,
+				STANDARD_MESSAGE);
+
+		return handleExceptionInternal(ex, problemDetail, new HttpHeaders(), status, request);
+	}
+
+	@ExceptionHandler(ErroInternoNoServidorException.class)
+	public ResponseEntity<Object> handleErroInternoNoServidor(ErroInternoNoServidorException ex, WebRequest request) {
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		Error error = Error.ERRO_INTERNO_NO_SERVIDOR;
+		String message = ex.getMessage();
 		ProblemDetail problemDetail = new ProblemDetail(error.getType(), error.getTitle(), status.value(), message,
 				STANDARD_MESSAGE);
 

@@ -1,6 +1,7 @@
 package com.totalmed.svcbackend.domain.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.totalmed.svcbackend.domain.dto.AgendamentoVacinaRelatorioDTO;
 import com.totalmed.svcbackend.domain.model.AgendamentoVacina;
 
 @Repository
@@ -27,4 +29,6 @@ public interface AgendamentoVacinaRepository extends JpaRepository<AgendamentoVa
 	@Query("select a from AgendamentoVacina a where a.isVacinaTomada = false")
 	Page<AgendamentoVacina> buscarTodosAgendamentosDeVacinasQueNaoForamTomadasPorPaginacao(Pageable pageable);
 
+	@Query("select new com.totalmed.svcbackend.domain.dto.AgendamentoVacinaRelatorioDTO(a.id, a.dataAgendamento, a.tipoVacina) from AgendamentoVacina a where a.usuario.id = ?1")
+	List<AgendamentoVacinaRelatorioDTO> buscarTodosAgendamentosDoUsuario(Long usuarioId);
 }

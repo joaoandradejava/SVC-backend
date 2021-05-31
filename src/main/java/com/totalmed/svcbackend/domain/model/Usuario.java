@@ -40,10 +40,10 @@ public class Usuario {
 	@Enumerated(EnumType.STRING)
 	private Set<Perfil> perfis = new HashSet<>();
 
-	@OneToMany(mappedBy = "usuario")
+	@OneToMany(mappedBy = "usuario", orphanRemoval = true)
 	private List<Feedback> feedbacks = new ArrayList<>();
 
-	@OneToMany(mappedBy = "usuario")
+	@OneToMany(mappedBy = "usuario", orphanRemoval = true)
 	private List<AgendamentoVacina> agendamentos = new ArrayList<>();
 
 	public Usuario() {
