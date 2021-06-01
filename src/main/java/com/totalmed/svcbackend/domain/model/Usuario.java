@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.totalmed.svcbackend.domain.model.enumeration.Perfil;
 
@@ -45,6 +46,9 @@ public class Usuario {
 
 	@OneToMany(mappedBy = "usuario", orphanRemoval = true)
 	private List<AgendamentoVacina> agendamentos = new ArrayList<>();
+
+	@OneToOne
+	private CarteiraVacinacao carteiraVacinacao;
 
 	public Usuario() {
 	}
@@ -147,6 +151,14 @@ public class Usuario {
 
 	public void setAgendamentos(List<AgendamentoVacina> agendamentos) {
 		this.agendamentos = agendamentos;
+	}
+
+	public CarteiraVacinacao getCarteiraVacinacao() {
+		return carteiraVacinacao;
+	}
+
+	public void setCarteiraVacinacao(CarteiraVacinacao carteiraVacinacao) {
+		this.carteiraVacinacao = carteiraVacinacao;
 	}
 
 	public void adicionarPerfil(Perfil perfil) {

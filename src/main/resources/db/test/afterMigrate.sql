@@ -2,6 +2,7 @@ truncate table usuario restart identity cascade;
 truncate table perfil restart identity cascade;
 truncate table feedback restart identity cascade;
 truncate table agendamento_vacina restart identity cascade;
+truncate table carteira_vacinacao restart identity cascade;
 
 insert into usuario(nome, cpf, email, senha, telefone, is_ativo, cep, endereco, complemento, bairro, numero, cidade, estado) values
 ('Mark zuckberg', '16010903076', 'mark@gmail.com', '$2a$10$ygyHtHjjY9lJgpAzG/4HSuZORj9x/H/B2jNYDHRLnnxfH4n.Sl.xW', '55992113435', 'TRUE', '01001000', 'Praça da Sé', 'lado ímpar', 'Sé', '330', 'São Paulo', 'São Paulo'),
