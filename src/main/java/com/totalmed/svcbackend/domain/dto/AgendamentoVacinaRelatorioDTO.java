@@ -1,16 +1,17 @@
 package com.totalmed.svcbackend.domain.dto;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class AgendamentoVacinaRelatorioDTO {
 	private final Long id;
-	private final String dataDoAgendamento;
+	private final Date dataDoAgendamento;
 	private final String vacina;
 
 	public AgendamentoVacinaRelatorioDTO(Long id, LocalDateTime dataDoAgendamento, String vacina) {
-		super();
 		this.id = id;
-		this.dataDoAgendamento = dataDoAgendamento.toString();
+		this.dataDoAgendamento = Date.from(dataDoAgendamento.atZone(ZoneId.systemDefault()).toInstant());
 		this.vacina = vacina;
 	}
 
@@ -18,7 +19,7 @@ public class AgendamentoVacinaRelatorioDTO {
 		return id;
 	}
 
-	public String getDataDoAgendamento() {
+	public Date getDataDoAgendamento() {
 		return dataDoAgendamento;
 	}
 
