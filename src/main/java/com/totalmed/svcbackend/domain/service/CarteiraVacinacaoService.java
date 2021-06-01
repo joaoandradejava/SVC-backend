@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.totalmed.svcbackend.domain.exception.CarteiraVacinacaoNaoEncontradaException;
 import com.totalmed.svcbackend.domain.exception.NegocioException;
 import com.totalmed.svcbackend.domain.model.CarteiraVacinacao;
 import com.totalmed.svcbackend.domain.model.Usuario;
@@ -21,14 +20,11 @@ public class CarteiraVacinacaoService {
 	@Autowired
 	private CadastroUsuarioService cadastroUsuarioService;
 
-	public CarteiraVacinacao buscarCarteiraDoUsuario(Long usuarioId, Long carteiraId) {
+	public CarteiraVacinacao buscarCarteiraDoUsuario(Long usuarioId) {
 		cadastroUsuarioService.buscarPorId(usuarioId);
-		buscarPorId(carteiraId);
 
 		return repository.buscarCarteiraDoUsuario(usuarioId)
-				.orElseThrow(() -> new NegocioException(
-						String.format("A carteira de vacinaçãao de id %d não estar associada com o usuario de id %d",
-								carteiraId, usuarioId)));
+				.orElseThrow(() -> new NegocioException("Você não possui uma carteira de vacinação!"));
 	}
 
 	@Transactional
@@ -48,24 +44,18 @@ public class CarteiraVacinacaoService {
 	}
 
 	@Transactional
-	public void removerCarteiraDoUsuario(Long usuarioId, Long carteiraId) {
-		buscarCarteiraDoUsuario(usuarioId, carteiraId);
+	public void removerCarteiraDoUsuario(Long usuarioId) {
 		Usuario usuario = cadastroUsuarioService.buscarPorId(usuarioId);
+		CarteiraVacinacao carteiraVacinacao = buscarCarteiraDoUsuario(usuarioId);
 
 		usuario.setCarteiraVacinacao(null);
-		repository.deleteById(carteiraId);
+		repository.deleteById(carteiraVacinacao.getId());
 
-	}
-
-	private CarteiraVacinacao buscarPorId(Long carteiraId) {
-		return repository.findById(carteiraId)
-				.orElseThrow(() -> new CarteiraVacinacaoNaoEncontradaException(carteiraId));
 	}
 
 	@Transactional
-	public void adicionarVacinaTomada(VacinaTomada vacinaTomada, Long usuarioId, Long carteiraId) {
-		CarteiraVacinacao carteiraVacinacao = buscarCarteiraDoUsuario(usuarioId, carteiraId);
-
+	public void adicionarVacinaTomada(VacinaTomada vacinaTomada, Long usuarioId) {
+		CarteiraVacinacao carteiraVacinacao = buscarCarteiraDoUsuario(usuarioId);
 		vacinaTomada.setCarteiraVacinacao(carteiraVacinacao);
 
 		carteiraVacinacao.adicionarVacinaTomada(vacinaTomada);

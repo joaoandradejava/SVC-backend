@@ -38,9 +38,9 @@ public class CarteiraVacinacaoController {
 	@Autowired
 	private VacinaTomadaInputDisassembler vacinaTomadaInputDisassembler;
 
-	@GetMapping("/{carteiraId}")
-	public CarteiraVacinacaoModel buscarCarteiraDoUsuario(@PathVariable Long usuarioId, @PathVariable Long carteiraId) {
-		CarteiraVacinacao carteiraVacinacao = carteiraVacinacaoService.buscarCarteiraDoUsuario(usuarioId, carteiraId);
+	@GetMapping
+	public CarteiraVacinacaoModel buscarCarteiraDoUsuario(@PathVariable Long usuarioId) {
+		CarteiraVacinacao carteiraVacinacao = carteiraVacinacaoService.buscarCarteiraDoUsuario(usuarioId);
 
 		return carteiraVacinacaoModelAssembler.toModel(carteiraVacinacao);
 	}
@@ -58,17 +58,17 @@ public class CarteiraVacinacaoController {
 		return carteiraVacinacaoModelAssembler.toModel(carteiraVacinacao);
 	}
 
-	@DeleteMapping("/{carteiraId}")
+	@DeleteMapping
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void removerCarteira(@PathVariable Long usuarioId, @PathVariable Long carteiraId) {
-		carteiraVacinacaoService.removerCarteiraDoUsuario(usuarioId, carteiraId);
+	public void removerCarteira(@PathVariable Long usuarioId) {
+		carteiraVacinacaoService.removerCarteiraDoUsuario(usuarioId);
 	}
 
-	@PostMapping("/{carteiraId}/vacina-tomada")
+	@PostMapping("/vacina-tomada")
 	public void adicionarVacinaTomada(@Valid @RequestBody VacinaTomadaInput vacinaTomadaInput,
-			@PathVariable Long usuarioId, @PathVariable Long carteiraId) {
+			@PathVariable Long usuarioId) {
 		carteiraVacinacaoService.adicionarVacinaTomada(vacinaTomadaInputDisassembler.toDomainModel(vacinaTomadaInput),
-				usuarioId, carteiraId);
+				usuarioId);
 	}
 
 }
